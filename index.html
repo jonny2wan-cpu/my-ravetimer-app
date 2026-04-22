@@ -7,20 +7,30 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet"/>
 <style>
-/* ══════════════════════════════════════
-   全域變數與 Reset
-══════════════════════════════════════ */
+
+/* ══════════════════════════════════════════
+   CSS 變數
+══════════════════════════════════════════ */
 :root {
   --neon-yellow:  #FFD600;
   --neon-orange:  #FF8C00;
-  --neon-red:     #FF3B3B;
   --deep-blue:    #04091A;
-  --mid-blue:     #071226;
   --glass-bg:     rgba(8, 22, 58, 0.55);
   --glass-border: rgba(90, 150, 255, 0.18);
   --text-main:    #E8F0FF;
   --text-muted:   #4A6A9A;
+
+  /* 響應式字級 / 間距 */
+  --fs-timer:   clamp(26px, 4.5vw, 44px);
+  --fs-label:   clamp(8px,  1vw,   11px);
+  --fs-heading: clamp(11px, 1.3vw, 15px);
+  --fs-rec:     clamp(9px,  1vw,   12px);
+  --fs-btn:     clamp(10px, 1.1vw, 13px);
+  --btn-py:     clamp(9px,  1.1vw, 13px);
+  --pad-panel:  clamp(12px, 1.8vw, 22px);
+  --gap-panel:  clamp(8px,  1.1vw, 16px);
 }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -28,96 +38,94 @@ html, body {
   font-family: 'Noto Sans TC', sans-serif;
   background: var(--deep-blue);
   color: var(--text-main);
-  overflow: hidden; /* 全螢幕不捲動 */
+  /* 允許捲動（垂直佈局在小螢幕可能需要） */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* ══════════════════════════════════════
-   星空動態背景
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   星空背景
+══════════════════════════════════════════ */
 .starfield {
   position: fixed; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse at 15% 25%, rgba(15,50,130,.4) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 70%, rgba(8,35,110,.35) 0%, transparent 55%),
-    radial-gradient(ellipse at 50%  5%, rgba(25,70,180,.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 25%, rgba(15,50,130,.4)  0%, transparent 55%),
+    radial-gradient(ellipse at 85% 70%, rgba(8,35,110,.35)  0%, transparent 55%),
+    radial-gradient(ellipse at 50%  5%, rgba(25,70,180,.2)  0%, transparent 50%),
     var(--deep-blue);
 }
 .starfield::before {
-  content:'';
-  position:absolute; inset:0;
+  content: ''; position: absolute; inset: 0;
   background-image:
-    radial-gradient(1px 1px at  8% 12%, rgba(255,255,255,.65) 0%,transparent 100%),
-    radial-gradient(1px 1px at 22% 33%, rgba(255,255,255,.4)  0%,transparent 100%),
-    radial-gradient(1px 1px at 37% 18%, rgba(255,255,255,.7)  0%,transparent 100%),
-    radial-gradient(1px 1px at 52% 48%, rgba(255,255,255,.35) 0%,transparent 100%),
-    radial-gradient(1px 1px at 68%  9%, rgba(255,255,255,.6)  0%,transparent 100%),
-    radial-gradient(1px 1px at 83% 38%, rgba(255,255,255,.5)  0%,transparent 100%),
-    radial-gradient(1px 1px at 14% 72%, rgba(255,255,255,.45) 0%,transparent 100%),
-    radial-gradient(1px 1px at 91% 78%, rgba(255,255,255,.6)  0%,transparent 100%),
-    radial-gradient(2px 2px at 28% 58%, rgba(255,214,0, .3)   0%,transparent 100%),
-    radial-gradient(2px 2px at 62% 82%, rgba(100,160,255,.4)  0%,transparent 100%),
-    radial-gradient(1px 1px at 46% 90%, rgba(255,255,255,.5)  0%,transparent 100%),
-    radial-gradient(1px 1px at  4% 53%, rgba(255,255,255,.3)  0%,transparent 100%),
-    radial-gradient(1px 1px at 76% 26%, rgba(255,255,255,.45) 0%,transparent 100%),
-    radial-gradient(1px 1px at 95% 14%, rgba(255,255,255,.6)  0%,transparent 100%);
+    radial-gradient(1px 1px at  8% 12%, rgba(255,255,255,.65) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 33%, rgba(255,255,255,.4)  0%, transparent 100%),
+    radial-gradient(1px 1px at 37% 18%, rgba(255,255,255,.7)  0%, transparent 100%),
+    radial-gradient(1px 1px at 52% 48%, rgba(255,255,255,.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68%  9%, rgba(255,255,255,.6)  0%, transparent 100%),
+    radial-gradient(1px 1px at 83% 38%, rgba(255,255,255,.5)  0%, transparent 100%),
+    radial-gradient(1px 1px at 14% 72%, rgba(255,255,255,.45) 0%, transparent 100%),
+    radial-gradient(1px 1px at 91% 78%, rgba(255,255,255,.6)  0%, transparent 100%),
+    radial-gradient(2px 2px at 28% 58%, rgba(255,214,0,.3)    0%, transparent 100%),
+    radial-gradient(2px 2px at 62% 82%, rgba(100,160,255,.4)  0%, transparent 100%),
+    radial-gradient(1px 1px at 46% 90%, rgba(255,255,255,.5)  0%, transparent 100%),
+    radial-gradient(1px 1px at  4% 53%, rgba(255,255,255,.3)  0%, transparent 100%),
+    radial-gradient(1px 1px at 76% 26%, rgba(255,255,255,.45) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 14%, rgba(255,255,255,.6)  0%, transparent 100%);
 }
 .starfield::after {
-  content:''; position:absolute; inset:0;
+  content: ''; position: absolute; inset: 0;
   background-image: inherit;
   animation: twinkle 4s ease-in-out infinite alternate;
-  opacity:.5;
+  opacity: .5;
 }
 @keyframes twinkle { 0%{opacity:.3} 100%{opacity:.9} }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════
    掃描線
-══════════════════════════════════════ */
+══════════════════════════════════════════ */
 .scan-line {
-  position:fixed; top:0; left:0; right:0; height:2px; z-index:200;
-  background: linear-gradient(90deg, transparent 0%, var(--neon-yellow) 50%, transparent 100%);
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 500;
+  background: linear-gradient(90deg, transparent, var(--neon-yellow), transparent);
   animation: scan 7s ease-in-out infinite;
 }
 @keyframes scan {
-  0%,100% { transform:scaleX(0); opacity:0; }
-  35%,65% { transform:scaleX(1); opacity:.85; }
+  0%,100% { transform: scaleX(0); opacity: 0; }
+  35%,65% { transform: scaleX(1); opacity: .85; }
 }
 
-/* ══════════════════════════════════════
-   毛玻璃面板
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   毛玻璃
+══════════════════════════════════════════ */
 .glass {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   border-radius: 16px;
-  box-shadow: 0 0 0 1px rgba(80,130,220,.1), 0 8px 40px rgba(4,12,40,.7),
-              inset 0 1px 0 rgba(255,255,255,.05);
+  box-shadow:
+    0 0 0 1px rgba(80,130,220,.1),
+    0 8px 40px rgba(4,12,40,.7),
+    inset 0 1px 0 rgba(255,255,255,.05);
 }
 .glass-inner {
-  background: rgba(4, 14, 42, 0.6);
+  background: rgba(4,14,42,.6);
   border: 1px solid rgba(60,110,200,.14);
   border-radius: 10px;
 }
 
-/* ══════════════════════════════════════
-   字型
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   計時數字
+══════════════════════════════════════════ */
 .orbitron { font-family: 'Orbitron', monospace; }
 
-/* ══════════════════════════════════════
-   計時數字
-══════════════════════════════════════ */
 .timer-num {
-  font-family: 'Orbitron', monospace;
-  font-weight: 900;
-  color: #fff;
+  font-family: 'Orbitron', monospace; font-weight: 900;
+  color: #fff; line-height: 1; letter-spacing: 2px;
   text-shadow:
     0 0 12px rgba(120,180,255,.9),
     0 0 30px rgba(60,120,255,.5),
     0 0 60px rgba(30,80,200,.3);
-  line-height: 1;
-  letter-spacing: 2px;
+  transition: color .4s, text-shadow .4s;
 }
 .timer-num.warn {
   color: var(--neon-yellow);
@@ -127,9 +135,9 @@ html, body {
     0 0 55px rgba(255,100,0,.3);
 }
 
-/* ══════════════════════════════════════
-   閃電徽章
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   閃電圖示框
+══════════════════════════════════════════ */
 .bolt-badge {
   display: inline-flex; align-items: center; justify-content: center;
   width: 36px; height: 36px; border-radius: 8px; font-size: 18px; flex-shrink: 0;
@@ -137,14 +145,12 @@ html, body {
   box-shadow: 0 0 14px rgba(255,214,0,.55), 0 0 28px rgba(255,140,0,.2);
 }
 
-/* ══════════════════════════════════════
-   記錄按鈕
-══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   ⚡ 記錄按鈕
+══════════════════════════════════════════ */
 .btn-rec {
-  cursor: pointer;
-  border: none; border-radius: 10px;
-  font-family: 'Orbitron', monospace; font-weight: 700;
-  letter-spacing: 1.2px;
+  cursor: pointer; border: none; border-radius: 10px;
+  font-family: 'Orbitron', monospace; font-weight: 700; letter-spacing: 1.2px;
   background: linear-gradient(135deg, #1255B0, #0C3D8A);
   color: var(--neon-yellow);
   box-shadow: 0 0 0 1px rgba(80,140,255,.25), 0 4px 18px rgba(18,85,176,.4);
@@ -154,67 +160,73 @@ html, body {
   width: 100%;
 }
 .btn-rec::before {
-  content:''; position:absolute; inset:0;
+  content: ''; position: absolute; inset: 0;
   background: linear-gradient(135deg, rgba(255,214,0,.12), transparent);
-  opacity:0; transition:opacity .2s;
+  opacity: 0; transition: opacity .2s;
 }
-.btn-rec:hover::before { opacity:1; }
-.btn-rec:active { transform: scale(.95); }
+.btn-rec:hover::before { opacity: 1; }
+.btn-rec:active        { transform: scale(.95); }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════
    安全降落按鈕
-══════════════════════════════════════ */
+══════════════════════════════════════════ */
 .btn-land {
   cursor: pointer;
-  border: 1px solid rgba(255,59,59,.35);
-  border-radius: 7px;
-  font-family: 'Orbitron', monospace;
-  letter-spacing: .8px;
-  background: rgba(255,59,59,.08);
-  color: #FF7070;
+  border: 1px solid rgba(255,59,59,.35); border-radius: 7px;
+  font-family: 'Orbitron', monospace; letter-spacing: .8px;
+  background: rgba(255,59,59,.08); color: #FF7070;
   transition: transform .12s, background .2s, box-shadow .2s;
-  display: flex; align-items: center; gap: 4px;
-  white-space: nowrap;
+  display: flex; align-items: center; gap: 4px; white-space: nowrap;
 }
-.btn-land:hover {
-  background: rgba(255,59,59,.2);
-  box-shadow: 0 0 12px rgba(255,59,59,.3);
-}
+.btn-land:hover { background: rgba(255,59,59,.2); box-shadow: 0 0 12px rgba(255,59,59,.3); }
 .btn-land:active { transform: scale(.95); }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════
    任務計數徽章
-══════════════════════════════════════ */
+══════════════════════════════════════════ */
 .mission-badge {
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 22px; height: 20px;
-  padding: 0 6px;
+  min-width: 22px; height: 20px; padding: 0 6px;
   background: linear-gradient(135deg, rgba(255,214,0,.25), rgba(255,140,0,.15));
-  border: 1px solid rgba(255,214,0,.45);
-  border-radius: 999px;
-  font-family: 'Orbitron', monospace;
-  font-size: 10px; font-weight: 700;
-  color: var(--neon-yellow);
-  box-shadow: 0 0 8px rgba(255,214,0,.2);
-  line-height: 1;
+  border: 1px solid rgba(255,214,0,.45); border-radius: 999px;
+  font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700;
+  color: var(--neon-yellow); box-shadow: 0 0 8px rgba(255,214,0,.2); line-height: 1;
 }
 
-/* ══════════════════════════════════════
+/* 月餅累計總量徽章 */
+.total-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 2px 9px; border-radius: 999px;
+  font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700; line-height: 1;
+  transition: all .35s;
+}
+.total-badge.ok {
+  background: rgba(30,100,255,.15); border: 1px solid rgba(80,140,255,.35); color: #7EB3FF;
+}
+.total-badge.over {
+  background: rgba(180,0,0,.25); border: 1px solid rgba(255,59,59,.5); color: #FF8080;
+  box-shadow: 0 0 10px rgba(255,59,59,.3);
+  animation: totalGlow 1.8s ease-in-out infinite;
+}
+@keyframes totalGlow {
+  0%,100% { box-shadow: 0 0 6px rgba(255,59,59,.25); }
+  50%      { box-shadow: 0 0 18px rgba(255,59,59,.6); }
+}
+
+/* ══════════════════════════════════════════
    記錄列表
-══════════════════════════════════════ */
+══════════════════════════════════════════ */
 .rec-list {
-  overflow-y: auto;
-  flex: 1;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(80,130,220,.2) transparent;
+  overflow-y: auto; flex: 1;
+  scrollbar-width: thin; scrollbar-color: rgba(80,130,220,.2) transparent;
   display: flex; flex-direction: column; gap: 5px;
 }
 .rec-list::-webkit-scrollbar { width: 3px; }
 .rec-list::-webkit-scrollbar-thumb { background: rgba(80,130,220,.25); border-radius: 4px; }
 
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════
    記錄項目
-══════════════════════════════════════ */
+══════════════════════════════════════════ */
 .rec-item {
   border-radius: 7px;
   background: rgba(8,22,60,.55);
@@ -223,120 +235,195 @@ html, body {
   animation: fadeIn .3s cubic-bezier(.22,1,.36,1) forwards;
 }
 @keyframes fadeIn {
-  from { opacity:0; transform:translateY(-10px) scale(.97); }
-  to   { opacity:1; transform:translateY(0)     scale(1);   }
+  from { opacity: 0; transform: translateY(-10px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0)     scale(1);   }
 }
 
-/* 警示狀態 */
-.rec-item.alert {
+/* WATER：時間間隔不足 1 小時 */
+.rec-item.alert-time {
   background: rgba(160,0,0,.22) !important;
   border: 1px solid rgba(255,59,59,.45) !important;
   animation: fadeIn .3s cubic-bezier(.22,1,.36,1) forwards,
              shake .5s .32s ease-out,
-             pulse 2.2s .85s ease-in-out infinite;
+             timePulse 2.2s .85s ease-in-out infinite;
+}
+/* CAKE：總量超過閾值 */
+.rec-item.alert-total {
+  background: rgba(150,40,0,.22) !important;
+  border: 1px solid rgba(255,100,0,.45) !important;
+  animation: fadeIn .3s cubic-bezier(.22,1,.36,1) forwards,
+             shake .5s .32s ease-out,
+             cakePulse 2.4s .85s ease-in-out infinite;
 }
 @keyframes shake {
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-5px)}
-  40%{transform:translateX(5px)}
-  60%{transform:translateX(-3px)}
-  80%{transform:translateX(3px)}
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
 }
-@keyframes pulse {
-  0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,0)}
-  50%    {box-shadow:0 0 0 4px rgba(255,59,59,.2)}
+@keyframes timePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,59,59,0); }
+  50%     { box-shadow: 0 0 0 4px rgba(255,59,59,.22); }
 }
-
-/* ══════════════════════════════════════
-   垂直分隔線
-══════════════════════════════════════ */
-.v-divider {
-  width: 1px; align-self: stretch; flex-shrink: 0;
-  background: linear-gradient(to bottom,
-    transparent 0%,
-    rgba(80,140,255,.25) 25%,
-    rgba(255,214,0,.4)  50%,
-    rgba(80,140,255,.25) 75%,
-    transparent 100%
-  );
+@keyframes cakePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,100,0,0); }
+  50%     { box-shadow: 0 0 0 4px rgba(255,100,0,.22); }
 }
 
-/* ══════════════════════════════════════
-   LOGO 閃電脈衝
-══════════════════════════════════════ */
-.logo-bolt {
-  animation: boltPulse 2.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(255,214,0,.7));
+/* ══════════════════════════════════════════
+   份量選擇 Modal
+══════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(2,6,20,.80);
+  backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
 }
-@keyframes boltPulse {
-  0%,100% { filter:drop-shadow(0 0 8px rgba(255,214,0,.7)); }
-  50%     { filter:drop-shadow(0 0 22px rgba(255,214,0,1)) drop-shadow(0 0 40px rgba(255,140,0,.5)); }
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: rgba(5,14,48,.97);
+  border: 1px solid rgba(90,150,255,.25);
+  border-radius: 20px;
+  padding: 30px 26px 24px;
+  width: min(340px, 88vw);
+  box-shadow:
+    0 0 0 1px rgba(80,130,220,.12),
+    0 28px 64px rgba(2,8,30,.92);
+  animation: modalIn .25s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.88) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
 }
 
-/* ══════════════════════════════════════
-   響應式尺寸策略
-   用 CSS 變數 + clamp 讓一套規格同時
-   適配手機 / 平板 / 桌機，而非換行
-══════════════════════════════════════ */
+.portion-row { display: flex; gap: 14px; margin-bottom: 20px; }
 
-/* 桌機預設 */
-:root {
-  --fs-timer:   clamp(22px, 3.2vw, 40px);
-  --fs-label:   clamp(8px,  .85vw, 11px);
-  --fs-heading: clamp(11px, 1.1vw, 14px);
-  --fs-rec:     clamp(9px,  .85vw, 12px);
-  --fs-btn:     clamp(9px,  .8vw,  12px);
-  --btn-py:     clamp(7px,  1vw,   12px);
-  --pad-panel:  clamp(8px,  1.2vw, 20px);
-  --gap-panel:  clamp(5px,  .9vw,  14px);
+.portion-btn {
+  cursor: pointer; flex: 1; padding: 20px 0; border-radius: 14px;
+  font-family: 'Orbitron', monospace; font-weight: 700; font-size: 24px;
+  border: 2px solid rgba(255,214,0,.28);
+  background: rgba(255,214,0,.05);
+  color: var(--neon-yellow);
+  transition: transform .12s, background .18s, border-color .18s, box-shadow .18s;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.portion-btn:hover {
+  background: rgba(255,214,0,.15);
+  border-color: rgba(255,214,0,.75);
+  box-shadow: 0 0 24px rgba(255,214,0,.35);
+}
+.portion-btn:active { transform: scale(.94); }
+.portion-sub { font-size: 10px; letter-spacing: .14em; color: rgba(255,214,0,.5); }
+
+.modal-cancel {
+  cursor: pointer; width: 100%; padding: 11px; border-radius: 9px;
+  border: 1px solid rgba(80,130,220,.2);
+  background: rgba(20,40,100,.3);
+  font-family: 'Orbitron', monospace; font-size: 11px; letter-spacing: .15em;
+  color: var(--text-muted); transition: background .2s;
+}
+.modal-cancel:hover { background: rgba(30,60,140,.45); }
+
+/* ══════════════════════════════════════════
+   App 外殼 & 版面
+══════════════════════════════════════════ */
+#app {
+  position: relative; z-index: 10;
+  min-height: 100%;
+  display: flex; flex-direction: column;
+  padding: clamp(6px, 1.2vw, 12px);
+  gap: clamp(6px, 1vw, 12px);
 }
 
-/* ── 主佈局：永遠左右並排 ── */
-#main-layout {
-  display: flex;
-  flex-direction: row !important;   /* 硬性：永不換行 */
-  gap: clamp(6px, 1.2vw, 14px);
-  flex: 1;
-  min-height: 0;
-}
-.panel {
-  flex: 1 1 0;
-  min-width: 0;
-  padding: var(--pad-panel);
-  gap: var(--gap-panel);
-  display: flex;
-  flex-direction: column;
-}
-
-/* ══════════════════════════════════════
-   Logo bar
-══════════════════════════════════════ */
 #header-bar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: clamp(4px,1vw,10px) clamp(6px,1.5vw,16px);
+  padding: clamp(6px,1vw,12px) clamp(10px,1.8vw,20px);
   flex-shrink: 0;
 }
 
-/* ══════════════════════════════════════
-   App 容器
-══════════════════════════════════════ */
-#app {
-  position: relative; z-index: 10;
-  height: 100%; display: flex; flex-direction: column;
-  padding: clamp(4px, 1vw, 10px);
-  gap: clamp(4px, .8vw, 10px);
+/* ── 主區域：桌機左右 / 手機上下 ── */
+#main-layout {
+  display: flex;
+  flex-wrap: wrap;           /* 允許換行 → 手機自動垂直 */
+  gap: clamp(8px,1.2vw,14px);
+  flex: 1;
+  min-height: 0;
 }
+
+/* 面板最小寬度 280px；桌機並排，手機各佔滿寬 */
+.panel {
+  flex: 1 1 280px;           /* 寬度不足時換行 */
+  min-width: 0;
+  min-height: 360px;
+  padding: var(--pad-panel);
+  gap: var(--gap-panel);
+  display: flex; flex-direction: column;
+}
+
+/* 水平分隔線（手機垂直排列時的間隔裝飾） */
+.h-divider {
+  display: none;             /* 桌機不顯示 */
+  height: 1px; width: 100%;
+  background: linear-gradient(90deg,
+    transparent, rgba(80,140,255,.3) 25%,
+    rgba(255,214,0,.45) 50%,
+    rgba(80,140,255,.3) 75%, transparent);
+}
+@media (max-width: 620px) {
+  /* 手機時面板各佔滿寬 + 顯示水平分隔線 */
+  .panel { flex: 1 1 100%; min-height: 320px; }
+  .h-divider { display: block; }
+}
+
+/* LOGO 閃電 */
+.logo-bolt {
+  filter: drop-shadow(0 0 8px rgba(255,214,0,.7));
+  animation: boltPulse 2.5s ease-in-out infinite;
+}
+@keyframes boltPulse {
+  0%,100% { filter: drop-shadow(0 0 8px  rgba(255,214,0,.7)); }
+  50%     { filter: drop-shadow(0 0 22px rgba(255,214,0,1))
+                    drop-shadow(0 0 40px rgba(255,140,0,.5)); }
+}
+
 </style>
 </head>
 <body>
 
-<!-- 星空 + 掃描線 -->
+<!-- 星空 / 掃描線 -->
 <div class="starfield"></div>
 <div class="scan-line"></div>
 
+<!-- ══════════════════════════════════════════
+     月餅份量選擇 Modal
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="portionModal">
+  <div class="modal-box">
+    <div class="orbitron" style="font-size:10px;letter-spacing:.28em;color:var(--text-muted);margin-bottom:6px">MOONCAKE LOG</div>
+    <div class="orbitron" style="font-size:18px;font-weight:700;color:#fff;margin-bottom:24px">選擇份量</div>
+    <div class="portion-row">
+      <button class="portion-btn" onclick="confirmPortion(0.5)">
+        <span>½</span>
+        <span class="portion-sub">0.5 份</span>
+      </button>
+      <button class="portion-btn" onclick="confirmPortion(1)">
+        <span>1</span>
+        <span class="portion-sub">1.0 份</span>
+      </button>
+    </div>
+    <button class="modal-cancel" onclick="closeModal()">✕ 取消</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     主 App
+══════════════════════════════════════════ -->
 <div id="app">
 
-  <!-- ── HEADER ── -->
+  <!-- HEADER -->
   <div id="header-bar" class="glass">
     <div style="display:flex;align-items:center;gap:10px">
       <span class="logo-bolt" style="font-size:clamp(18px,2.5vw,26px)">⚡</span>
@@ -348,30 +435,28 @@ html, body {
     <div class="orbitron" id="live-clock" style="font-size:clamp(9px,.9vw,12px);letter-spacing:.15em;color:var(--text-muted)">--:--:--</div>
   </div>
 
-  <!-- ── 主佈局（永遠左右並排）── -->
+  <!-- 主佈局 -->
   <div id="main-layout">
 
-    <!-- ════ 左側：開水 ════ -->
+    <!-- ════ WATER LOG ════ -->
     <div class="panel glass" id="panel-water">
 
       <!-- 標題 -->
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
         <div class="bolt-badge">💧</div>
-        <div>
-          <div class="orbitron" style="font-size:var(--fs-heading);font-weight:700;color:#fff;letter-spacing:.15em">WATER LOG</div>
-        </div>
+        <div class="orbitron" style="font-size:var(--fs-heading);font-weight:700;color:#fff;letter-spacing:.15em">WATER LOG</div>
       </div>
 
-      <!-- 距上次計時 -->
-      <div class="glass-inner" style="padding:clamp(6px,1vw,12px);text-align:center;flex-shrink:0">
-        <div class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:var(--text-muted);margin-bottom:4px">距上次記錄</div>
+      <!-- 計時顯示 -->
+      <div class="glass-inner" style="padding:clamp(8px,1.2vw,14px);text-align:center;flex-shrink:0">
+        <div class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:var(--text-muted);margin-bottom:5px">距上次記錄</div>
         <div class="timer-num" id="el-water" style="font-size:var(--fs-timer)">--:--:--</div>
-        <div class="orbitron" id="lb-water" style="font-size:var(--fs-label);color:var(--text-muted);margin-top:4px;letter-spacing:.1em">尚無記錄</div>
+        <div class="orbitron" id="lb-water" style="font-size:var(--fs-label);color:var(--text-muted);margin-top:5px;letter-spacing:.1em">尚無記錄</div>
       </div>
 
       <!-- 記錄按鈕 -->
-      <button class="btn-rec" style="font-size:var(--fs-btn);padding:var(--btn-py) 0" onclick="addRecord('water')">
-        <span>⚡ 記錄</span>
+      <button class="btn-rec" style="font-size:var(--fs-btn);padding:var(--btn-py) 0;flex-shrink:0" onclick="addWater()">
+        ⚡ 記錄
       </button>
 
       <!-- HISTORY bar -->
@@ -380,41 +465,46 @@ html, body {
           <span class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:#4A7ACC">HISTORY</span>
           <span class="mission-badge" id="badge-water">0</span>
         </div>
-        <button class="btn-land" style="font-size:var(--fs-label);padding:4px 8px" onclick="safetyLanding('water')">
+        <button class="btn-land" style="font-size:var(--fs-label);padding:4px 9px" onclick="safetyLanding('water')">
           🛬 安全降落
         </button>
       </div>
 
       <!-- 記錄列表 -->
       <div class="rec-list" id="list-water">
-        <div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:12px 0;letter-spacing:.1em">— 尚無記錄 —</div>
+        <div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:14px 0;letter-spacing:.1em">— 尚無記錄 —</div>
       </div>
-    </div>
+    </div><!-- /water panel -->
 
-    <!-- 分隔線 -->
-    <div class="v-divider"></div>
+    <!-- 手機用水平分隔線 -->
+    <div class="h-divider"></div>
 
-    <!-- ════ 右側：月餅 ════ -->
+    <!-- ════ MOONCAKE LOG ════ -->
     <div class="panel glass" id="panel-cake">
 
-      <!-- 標題 -->
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        <div class="bolt-badge">🥮</div>
-        <div>
+      <!-- 標題 + 累積總量 -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="bolt-badge">🥮</div>
           <div class="orbitron" style="font-size:var(--fs-heading);font-weight:700;color:#fff;letter-spacing:.15em">MOONCAKE LOG</div>
+        </div>
+        <!-- 累積份數徽章 -->
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="orbitron" style="font-size:var(--fs-label);color:var(--text-muted);letter-spacing:.1em">TOTAL</span>
+          <span class="total-badge ok" id="total-badge">0</span>
         </div>
       </div>
 
-      <!-- 距上次計時 -->
-      <div class="glass-inner" style="padding:clamp(6px,1vw,12px);text-align:center;flex-shrink:0">
-        <div class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:var(--text-muted);margin-bottom:4px">距上次記錄</div>
+      <!-- 計時顯示（月餅：純計時，不做顏色警示） -->
+      <div class="glass-inner" style="padding:clamp(8px,1.2vw,14px);text-align:center;flex-shrink:0">
+        <div class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:var(--text-muted);margin-bottom:5px">距上次記錄</div>
         <div class="timer-num" id="el-cake" style="font-size:var(--fs-timer)">--:--:--</div>
-        <div class="orbitron" id="lb-cake" style="font-size:var(--fs-label);color:var(--text-muted);margin-top:4px;letter-spacing:.1em">尚無記錄</div>
+        <div class="orbitron" id="lb-cake" style="font-size:var(--fs-label);color:var(--text-muted);margin-top:5px;letter-spacing:.1em">尚無記錄</div>
       </div>
 
-      <!-- 記錄按鈕 -->
-      <button class="btn-rec" style="font-size:var(--fs-btn);padding:var(--btn-py) 0" onclick="addRecord('cake')">
-        <span>⚡ 記錄</span>
+      <!-- 記錄按鈕 → 開 Modal -->
+      <button class="btn-rec" style="font-size:var(--fs-btn);padding:var(--btn-py) 0;flex-shrink:0" onclick="openPortionModal()">
+        ⚡ 記錄
       </button>
 
       <!-- HISTORY bar -->
@@ -423,147 +513,168 @@ html, body {
           <span class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:#4A7ACC">HISTORY</span>
           <span class="mission-badge" id="badge-cake">0</span>
         </div>
-        <button class="btn-land" style="font-size:var(--fs-label);padding:4px 8px" onclick="safetyLanding('cake')">
+        <button class="btn-land" style="font-size:var(--fs-label);padding:4px 9px" onclick="safetyLanding('cake')">
           🛬 安全降落
         </button>
       </div>
 
       <!-- 記錄列表 -->
       <div class="rec-list" id="list-cake">
-        <div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:12px 0;letter-spacing:.1em">— 尚無記錄 —</div>
+        <div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:14px 0;letter-spacing:.1em">— 尚無記錄 —</div>
       </div>
-    </div>
+    </div><!-- /cake panel -->
 
   </div><!-- /main-layout -->
 
-  <!-- FOOTER -->
-  <div class="orbitron" style="text-align:center;font-size:clamp(7px,.65vw,9px);letter-spacing:.25em;color:rgba(40,70,140,.7);flex-shrink:0">
+  <!-- Footer -->
+  <div class="orbitron" style="text-align:center;font-size:clamp(7px,.65vw,9px);letter-spacing:.25em;color:rgba(40,70,140,.6);flex-shrink:0;padding-bottom:4px">
     ⚡ F.J.O.D · FLIGHT JOURNAL OF DRINKS · DATA STORED LOCALLY · ⚡
   </div>
 
 </div><!-- /app -->
 
-<!-- ══════════════════════════════════════
+
+<!-- ══════════════════════════════════════════
      JavaScript
-══════════════════════════════════════ -->
+══════════════════════════════════════════ -->
 <script>
 /* ── 常數 ── */
-const HOUR_MS = 3600_000;   // 1 小時毫秒數（警示閾值）
+const HOUR_MS    = 3_600_000;  // WATER 警示閾值：1 小時
+const CAKE_LIMIT = 3;          // CAKE 累積超過此份數 → 警示
 
-/* ── LocalStorage Key ── */
+/* ── localStorage Key ── */
 const KEY = { water: 'fjod_water', cake: 'fjod_cake' };
 
-/* ── 狀態（從 localStorage 初始化） ──
-   結構：{ records: [{ts, alert},...] }
-   records[0] 是最新的一筆
-*/
+/* ── 資料結構
+   water.records : [{ ts:number, alertTime:bool }, ...]
+   cake.records  : [{ ts:number, portion:number, runningTotal:number, alertTotal:bool }, ...]
+   records[0] 永遠是最新一筆
+── */
 const state = {
-  water: load('water'),
-  cake:  load('cake'),
+  water: loadStore('water'),
+  cake:  loadStore('cake'),
 };
 
-/* ── 讀取 localStorage ── */
-function load(type) {
+/* ── 讀 / 寫 localStorage ── */
+function loadStore(type) {
   try {
-    const raw = localStorage.getItem(KEY[type]);
-    const parsed = raw ? JSON.parse(raw) : null;
-    // 資料驗證：必須有 records 陣列
-    if (parsed && Array.isArray(parsed.records)) return parsed;
+    const p = JSON.parse(localStorage.getItem(KEY[type]));
+    if (p && Array.isArray(p.records)) return p;
   } catch {}
   return { records: [] };
 }
-
-/* ── 寫入 localStorage ── */
-function save(type) {
+function saveStore(type) {
   try { localStorage.setItem(KEY[type], JSON.stringify(state[type])); } catch {}
 }
 
-/* ── 新增記錄 ── */
-function addRecord(type) {
+/* ══════════════════════════════════════════
+   WATER：直接記錄，判斷時間間隔警示
+══════════════════════════════════════════ */
+function addWater() {
   const now  = Date.now();
-  const recs = state[type].records;
-
-  // 智能警示：與同類別上一筆間隔 < 1 小時
-  const isAlert = recs.length > 0 && (now - recs[0].ts) < HOUR_MS;
-
-  // 插入最前面（最新的在頂部）
-  recs.unshift({ ts: now, alert: isAlert });
-
-  save(type);
-  renderAll(type);
+  const recs = state.water.records;
+  /* 距上一筆 < 1 小時 → alertTime = true */
+  const alertTime = recs.length > 0 && (now - recs[0].ts) < HOUR_MS;
+  recs.unshift({ ts: now, alertTime });
+  saveStore('water');
+  renderWater();
 }
 
-/* ── 安全降落：僅當使用者主動按下才歸零 ── */
+/* ══════════════════════════════════════════
+   CAKE：Modal 流程
+══════════════════════════════════════════ */
+function openPortionModal() {
+  document.getElementById('portionModal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('portionModal').classList.remove('open');
+}
+function confirmPortion(portion) {
+  closeModal();
+  const now  = Date.now();
+  const recs = state.cake.records;
+  /* 累積總量 */
+  const prevTotal    = recs.length > 0 ? recs[0].runningTotal : 0;
+  const runningTotal = prevTotal + portion;
+  /* 總量超過閾值 → alertTotal = true（只看此筆記錄時的累積） */
+  const alertTotal   = runningTotal > CAKE_LIMIT;
+  recs.unshift({ ts: now, portion, runningTotal, alertTotal });
+  saveStore('cake');
+  renderCake();
+}
+
+/* ══════════════════════════════════════════
+   安全降落：使用者主動確認才歸零
+══════════════════════════════════════════ */
 function safetyLanding(type) {
-  const label = type === 'water' ? '開水' : '月餅';
+  const label = type === 'water' ? 'WATER LOG' : 'MOONCAKE LOG';
   if (!confirm(`🛬 確認執行「${label}」安全降落？\n此操作將清空所有記錄並重置計數器。`)) return;
   state[type].records = [];
-  save(type);
-  renderAll(type);
+  saveStore(type);
+  type === 'water' ? renderWater() : renderCake();
 }
 
-/* ── 格式化：HH:MM:SS ── */
+/* ══════════════════════════════════════════
+   工具函式
+══════════════════════════════════════════ */
 function fmtElapsed(ms) {
-  if (ms < 0) ms = 0;
-  const s = Math.floor(ms / 1000);
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
+  const s  = Math.floor(Math.max(ms, 0) / 1000);
+  const h  = Math.floor(s / 3600);
+  const m  = Math.floor((s % 3600) / 60);
   const ss = s % 60;
-  return [h,m,ss].map(v => String(v).padStart(2,'0')).join(':');
+  return [h, m, ss].map(v => String(v).padStart(2, '0')).join(':');
 }
-
-/* ── 格式化：時間字串 ── */
 function fmtTime(ts) {
-  return new Date(ts).toLocaleTimeString('zh-TW',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  return new Date(ts).toLocaleTimeString('zh-TW', { hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit' });
 }
 function fmtDate(ts) {
-  return new Date(ts).toLocaleDateString('zh-TW',{month:'2-digit',day:'2-digit'});
+  return new Date(ts).toLocaleDateString('zh-TW', { month:'2-digit', day:'2-digit' });
+}
+function fmtNum(n) {
+  return n % 1 === 0 ? String(n) : n.toFixed(1);
 }
 
-/* ── 渲染列表 + 徽章 ── */
-function renderAll(type) {
-  const recs    = state[type].records;
-  const listEl  = document.getElementById(`list-${type}`);
-  const badgeEl = document.getElementById(`badge-${type}`);
+/* ══════════════════════════════════════════
+   渲染 WATER 列表
+══════════════════════════════════════════ */
+function renderWater() {
+  const recs   = state.water.records;
+  const listEl = document.getElementById('list-water');
+  document.getElementById('badge-water').textContent = recs.length;
 
-  // 更新計數徽章（自安全降落以來的累積筆數）
-  badgeEl.textContent = recs.length;
-
-  if (recs.length === 0) {
-    listEl.innerHTML = `<div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:12px 0;letter-spacing:.1em">— 尚無記錄 —</div>`;
+  if (!recs.length) {
+    listEl.innerHTML = emptyMsg();
     return;
   }
 
   const frag = document.createDocumentFragment();
-
-  recs.forEach((rec, idx) => {
+  recs.forEach((rec, i) => {
     const div = document.createElement('div');
-    div.className = `rec-item${rec.alert ? ' alert' : ''}`;
-    div.style.cssText = 'padding:clamp(5px,.8vw,10px) clamp(6px,1vw,12px)';
+    div.className = `rec-item${rec.alertTime ? ' alert-time' : ''}`;
+    div.style.cssText = 'padding:clamp(6px,.9vw,10px) clamp(7px,1vw,13px)';
 
-    // 與下一筆（較早）的間隔
-    let intervalHtml = '';
-    if (idx < recs.length - 1) {
-      const diff = rec.ts - recs[idx + 1].ts;
-      const col  = rec.alert ? '#FF7070' : '#4A7ACC';
-      intervalHtml = `<span style="font-size:var(--fs-label);color:${col};margin-left:4px">+${fmtElapsed(diff)}</span>`;
+    /* 與前一筆的時間差 */
+    let gapHtml = '';
+    if (i < recs.length - 1) {
+      const diff = rec.ts - recs[i + 1].ts;
+      const col  = rec.alertTime ? '#FF7070' : '#4A7ACC';
+      gapHtml = `<span style="font-size:var(--fs-label);color:${col};margin-left:4px">+${fmtElapsed(diff)}</span>`;
     }
 
     div.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
         <div style="display:flex;align-items:center;gap:5px;min-width:0">
-          <span style="font-size:14px;flex-shrink:0">${rec.alert ? '⚠️' : '⚡'}</span>
-          <span class="orbitron" style="font-size:var(--fs-rec);font-weight:700;color:${rec.alert?'#FFB0B0':'#fff'};white-space:nowrap">
+          <span style="font-size:13px;flex-shrink:0">${rec.alertTime ? '⚠️' : '⚡'}</span>
+          <span class="orbitron" style="font-size:var(--fs-rec);font-weight:700;color:${rec.alertTime ? '#FFB0B0' : '#fff'};white-space:nowrap">
             ${fmtTime(rec.ts)}
           </span>
-          ${intervalHtml}
+          ${gapHtml}
         </div>
-        <span class="orbitron" style="font-size:var(--fs-label);color:${rec.alert?'#FF7070':'var(--text-muted)'};white-space:nowrap;flex-shrink:0">
+        <span class="orbitron" style="font-size:var(--fs-label);color:${rec.alertTime ? '#FF7070' : 'var(--text-muted)'};white-space:nowrap;flex-shrink:0">
           ${fmtDate(rec.ts)}
         </span>
       </div>
-      ${rec.alert ? `<div class="orbitron" style="font-size:var(--fs-label);color:#FF7070;margin-top:3px;letter-spacing:.08em">⚠ 未滿 1 小時</div>` : ''}
-    `;
+      ${rec.alertTime ? `<div class="orbitron" style="font-size:var(--fs-label);color:#FF7070;margin-top:3px;letter-spacing:.07em">⚠ 未滿 1 小時</div>` : ''}`;
 
     frag.appendChild(div);
   });
@@ -572,44 +683,119 @@ function renderAll(type) {
   listEl.appendChild(frag);
 }
 
-/* ── 即時計時器（每秒更新） ── */
+/* ══════════════════════════════════════════
+   渲染 CAKE 列表
+══════════════════════════════════════════ */
+function renderCake() {
+  const recs       = state.cake.records;
+  const listEl     = document.getElementById('list-cake');
+  const totalBadge = document.getElementById('total-badge');
+  document.getElementById('badge-cake').textContent = recs.length;
+
+  /* 更新總量徽章 */
+  const total  = recs.length > 0 ? recs[0].runningTotal : 0;
+  const isOver = total > CAKE_LIMIT;
+  totalBadge.textContent = fmtNum(total);
+  totalBadge.className   = `total-badge ${isOver ? 'over' : 'ok'}`;
+
+  if (!recs.length) {
+    listEl.innerHTML = emptyMsg();
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  recs.forEach((rec, i) => {
+    const div = document.createElement('div');
+    /* 月餅：無時間間隔警示，只有累積超標才警示 */
+    div.className = `rec-item${rec.alertTotal ? ' alert-total' : ''}`;
+    div.style.cssText = 'padding:clamp(6px,.9vw,10px) clamp(7px,1vw,13px)';
+
+    /* 與前一筆的時間差（純顯示，不影響警示色） */
+    let gapHtml = '';
+    if (i < recs.length - 1) {
+      const diff = rec.ts - recs[i + 1].ts;
+      gapHtml = `<span style="font-size:var(--fs-label);color:#4A7ACC;margin-left:4px">+${fmtElapsed(diff)}</span>`;
+    }
+
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
+        <div style="display:flex;align-items:center;gap:5px;min-width:0">
+          <span style="font-size:13px;flex-shrink:0">${rec.alertTotal ? '⚠️' : '🥮'}</span>
+          <span class="orbitron" style="font-size:var(--fs-rec);font-weight:700;color:${rec.alertTotal ? '#FFCC99' : '#fff'};white-space:nowrap">
+            ${fmtTime(rec.ts)}
+          </span>
+          ${gapHtml}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <!-- 本次份量標籤 -->
+          <span class="orbitron" style="
+            font-size:var(--fs-label); color:var(--neon-yellow);
+            background:rgba(255,214,0,.1); border:1px solid rgba(255,214,0,.3);
+            border-radius:5px; padding:1px 7px">
+            +${fmtNum(rec.portion)}
+          </span>
+          <!-- 累積總量 -->
+          <span class="orbitron" style="font-size:var(--fs-label);color:${rec.alertTotal ? '#FF9966' : 'var(--text-muted)'}">
+            ∑${fmtNum(rec.runningTotal)}
+          </span>
+        </div>
+      </div>
+      ${rec.alertTotal ? `<div class="orbitron" style="font-size:var(--fs-label);color:#FF9060;margin-top:3px;letter-spacing:.07em">⚠ 累積超過 ${CAKE_LIMIT} 份</div>` : ''}`;
+
+    frag.appendChild(div);
+  });
+
+  listEl.innerHTML = '';
+  listEl.appendChild(frag);
+}
+
+function emptyMsg() {
+  return `<div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:14px 0;letter-spacing:.1em">— 尚無記錄 —</div>`;
+}
+
+/* ══════════════════════════════════════════
+   即時計時器（每秒更新）
+══════════════════════════════════════════ */
 function tick() {
   const now = Date.now();
 
-  ['water','cake'].forEach(type => {
-    const recs = state[type].records;
-    const elEl = document.getElementById(`el-${type}`);
-    const lbEl = document.getElementById(`lb-${type}`);
-
-    if (recs.length === 0) {
-      elEl.textContent = '--:--:--';
-      elEl.classList.remove('warn');
-      lbEl.textContent = '尚無記錄';
-      return;
+  /* WATER：超過 1 小時 → 計時器黃色警示 */
+  (() => {
+    const recs = state.water.records;
+    const el   = document.getElementById('el-water');
+    const lb   = document.getElementById('lb-water');
+    if (!recs.length) {
+      el.textContent = '--:--:--'; el.classList.remove('warn');
+      lb.textContent = '尚無記錄'; return;
     }
+    const elapsed = now - recs[0].ts;
+    el.textContent = fmtElapsed(elapsed);
+    elapsed >= HOUR_MS ? el.classList.add('warn') : el.classList.remove('warn');
+    lb.textContent = `上次 ${fmtDate(recs[0].ts)} ${fmtTime(recs[0].ts)}`;
+  })();
 
-    const last    = recs[0].ts;
-    const elapsed = now - last;
-    elEl.textContent = fmtElapsed(elapsed);
-
-    // 超過 1 小時 → 黃色警示發光
-    if (elapsed >= HOUR_MS) {
-      elEl.classList.add('warn');
-    } else {
-      elEl.classList.remove('warn');
+  /* CAKE：純計時，不做顏色警示 */
+  (() => {
+    const recs = state.cake.records;
+    const el   = document.getElementById('el-cake');
+    const lb   = document.getElementById('lb-cake');
+    if (!recs.length) {
+      el.textContent = '--:--:--'; el.classList.remove('warn');
+      lb.textContent = '尚無記錄'; return;
     }
+    el.textContent = fmtElapsed(now - recs[0].ts);
+    el.classList.remove('warn');   /* 月餅計時器永遠白色 */
+    lb.textContent = `上次 ${fmtDate(recs[0].ts)} ${fmtTime(recs[0].ts)}`;
+  })();
 
-    lbEl.textContent = `上次 ${fmtDate(last)} ${fmtTime(last)}`;
-  });
-
-  // 頂部時鐘
+  /* 頂部時鐘 */
   document.getElementById('live-clock').textContent =
-    new Date().toLocaleTimeString('zh-TW',{hour12:false});
+    new Date().toLocaleTimeString('zh-TW', { hour12: false });
 }
 
 /* ── 初始化 ── */
-renderAll('water');
-renderAll('cake');
+renderWater();
+renderCake();
 tick();
 setInterval(tick, 1000);
 </script>
