@@ -13,14 +13,14 @@
 :root {
   --neon-yellow:  #FFD600;
   --neon-orange:  #FF8C00;
-  --deep-blue:    #04091A;
-  --glass-bg:     rgba(8, 22, 58, 0.55);
-  --glass-border: rgba(90, 150, 255, 0.18);
-  --text-main:    #E8F0FF;
-  --text-muted:   #4A6A9A;
-  --rec-bg:       #0D1F4A;
-  --rec-border:   rgba(60, 140, 255, 0.28);
-  --rec-glow:     rgba(40, 100, 255, 0.12);
+  --deep-blue:    #050C20;
+  --glass-bg:     rgba(12, 30, 72, 0.62);
+  --glass-border: rgba(100, 165, 255, 0.24);
+  --text-main:    #EDF4FF;
+  --text-muted:   #6A90C0;
+  --rec-bg:       #132560;
+  --rec-border:   rgba(70, 155, 255, 0.38);
+  --rec-glow:     rgba(50, 120, 255, 0.18);
 
   --fs-timer:   clamp(22px, 3.8vw, 42px);
   --fs-label:   clamp(8px,  .9vw,  11px);
@@ -132,7 +132,7 @@ html,body{
   50%    {transform:translate(-50%,-56%) scale(1.35); opacity:1;}
 }
 
-/* Icon 主體 */
+/* Icon 主體 — WATER：黃橙漸層 */
 .tap-icon-badge{
   display:inline-flex;align-items:center;justify-content:center;
   width:52px;height:52px;border-radius:14px;font-size:26px;
@@ -144,13 +144,33 @@ html,body{
 }
 @keyframes breatheBadge{
   0%,100%{box-shadow:0 0 12px rgba(255,214,0,.45),0 0 24px rgba(255,140,0,.15);}
-  50%    {box-shadow:0 0 24px rgba(255,214,0,.85),0 0 48px rgba(255,140,0,.4);}
+  50%    {box-shadow:0 0 26px rgba(255,214,0,.9),0 0 52px rgba(255,140,0,.45);}
 }
 
-/* 點擊回饋 */
+/* Icon 主體 — CAKE：青藍✕紫漸層，與 WATER 有別 */
+.tap-icon-badge.cake{
+  background:linear-gradient(135deg,#00D4FF,#7B2FFF);
+  box-shadow:0 0 16px rgba(0,200,255,.55),0 0 32px rgba(123,47,255,.25);
+  animation:breatheBadgeCake 3s ease-in-out infinite;
+}
+@keyframes breatheBadgeCake{
+  0%,100%{box-shadow:0 0 12px rgba(0,200,255,.4),0 0 26px rgba(123,47,255,.2);}
+  50%    {box-shadow:0 0 28px rgba(0,220,255,.9),0 0 52px rgba(150,80,255,.5);}
+}
+/* 呼吸光圈 — CAKE 用青藍色 */
+.tap-icon.cake-icon::before{
+  background:radial-gradient(circle,rgba(0,200,255,.2) 0%,transparent 70%);
+}
+
+/* 點擊回饋 — WATER */
 .tap-icon:active .tap-icon-badge{
   transform:scale(.88);
-  box-shadow:0 0 36px rgba(255,214,0,1),0 0 60px rgba(255,140,0,.6);
+  box-shadow:0 0 40px rgba(255,214,0,1),0 0 64px rgba(255,140,0,.65);
+}
+/* 點擊回饋 — CAKE */
+.tap-icon:active .tap-icon-badge.cake{
+  transform:scale(.88);
+  box-shadow:0 0 42px rgba(0,230,255,1),0 0 68px rgba(150,80,255,.75);
 }
 .tap-icon:active::before{
   animation:none;
@@ -452,7 +472,7 @@ html,body{
       <span class="logo-bolt" style="font-size:clamp(18px,2.5vw,26px)">⚡</span>
       <div>
         <div class="orbitron" style="font-size:clamp(14px,2vw,22px);font-weight:900;letter-spacing:.2em;color:#fff">F.J.O.D</div>
-        <div class="orbitron" style="font-size:clamp(7px,.75vw,10px);letter-spacing:.25em;color:var(--neon-yellow);opacity:.75">SMART RECORD SYSTEM</div>
+        <div class="orbitron" style="font-size:clamp(7px,.75vw,10px);letter-spacing:.25em;color:var(--neon-yellow);opacity:.75">FLYING JOURNEY OF THE DAY</div>
       </div>
     </div>
     <div class="orbitron" id="live-clock" style="font-size:clamp(9px,.9vw,12px);letter-spacing:.15em;color:var(--text-muted)">--:--:--</div>
@@ -477,13 +497,7 @@ html,body{
         <div class="orbitron" id="lb-water" style="font-size:var(--fs-label);color:var(--text-muted);margin-top:5px;letter-spacing:.1em">尚無記錄</div>
       </div>
 
-      <!-- ③ HISTORY 標籤（置中） -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0">
-        <span class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:#4A7ACC">HISTORY</span>
-        <span class="mission-badge" id="badge-water">0</span>
-      </div>
-
-      <!-- ④ 記錄列表 -->
+      <!-- ③ 記錄列表 -->
       <div class="rec-list" id="list-water">
         <div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:14px 0;letter-spacing:.1em">— 尚無記錄 —</div>
       </div>
@@ -498,8 +512,8 @@ html,body{
     <div class="panel glass">
 
       <!-- ① TAP ICON（點即記錄） -->
-      <div class="tap-icon" onclick="onCakeRecord()" style="flex-shrink:0;margin-bottom:2px">
-        <div class="tap-icon-badge">🥮</div>
+      <div class="tap-icon cake-icon" onclick="onCakeRecord()" style="flex-shrink:0;margin-bottom:2px">
+        <div class="tap-icon-badge cake">🥮</div>
         <div class="panel-title" style="margin-top:2px">MOONCAKE LOG</div>
         <div class="tap-label">tap to log</div>
       </div>
@@ -517,13 +531,7 @@ html,body{
         <div class="orbitron" id="lb-cake" style="font-size:var(--fs-label);color:var(--text-muted);margin-top:5px;letter-spacing:.1em">尚無記錄</div>
       </div>
 
-      <!-- ④ HISTORY 標籤（置中） -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0">
-        <span class="orbitron" style="font-size:var(--fs-label);letter-spacing:.2em;color:#4A7ACC">HISTORY</span>
-        <span class="mission-badge" id="badge-cake">0</span>
-      </div>
-
-      <!-- ⑤ 記錄列表 -->
+      <!-- ④ 記錄列表 -->
       <div class="rec-list" id="list-cake">
         <div style="text-align:center;font-size:var(--fs-rec);color:var(--text-muted);padding:14px 0;letter-spacing:.1em">— 尚無記錄 —</div>
       </div>
